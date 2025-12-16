@@ -1,7 +1,7 @@
 import Game from '../GameGroup/Game.jsx'
 import './GamesByLeague.styl'
 
-const GamesByLeague = ({games}) => {
+const GamesByLeague = ({games, onSelectGame}) => {
     const groups = {}
 
     games.forEach(game => {
@@ -24,7 +24,9 @@ const GamesByLeague = ({games}) => {
 
                     <ul className='games-container'>
                         {games.map(game => (
-                            <Game key={game.fixture.id} game = {game}/>
+                            <Game key={game.fixture.id} 
+                              game = {game} 
+                              onSelect={onSelectGame}/>
                         ))}
                     </ul>
                 </div>

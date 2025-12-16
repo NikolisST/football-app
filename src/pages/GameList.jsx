@@ -1,14 +1,16 @@
   import { useState, useEffect } from 'react'
-  import footballService  from '../../services/football.js'
-  import GamesByLeague from '../GamesByLeagueGroup/GamesByLeague.jsx'
+  import footballService  from '../services/football.js'
+  import GamesByLeague from '../components/GamesByLeagueGroup/GamesByLeague.jsx'
   import './GameList.styl'
   import { useMemo } from 'react'
-  import useGameStore from '../../stores/gameStore.js'
+  import useGameStore from '../stores/gameStore.js'
+  import GameDetails from '../components/GameDetailsGroup/GameDetails.jsx'
 
   const GameList = () => {
     const {games, setGames, date, setSelectedDate} = useGameStore()
     const [searchName, setSearchName] = useState('')
     const [headerOne, setHeaderOne] = useState("Today's Matches")
+    const [selectedGameId, setSelectedGameId] = useState(null)
 
     useEffect(() => {
       setGames(date)
@@ -50,7 +52,20 @@
           </div>
           <h2> {headerOne} </h2>
         
-        <GamesByLeague games={filteredGames}/>
+        <GamesByLeague games={filteredGames}
+            onSelectGame={setSelectedGameId}/>
+
+        {selectedGameId && (
+  <div className="modal-backdrop" onClick={() => setSelectedGameId(null)}>
+    <div className="modal-content" onClick={e => e.stopPropagation()}>
+      <GameDetails
+        gameId={selectedGameId}
+        onClose={() => setSelectedGameId(null)}
+      />
+    </div>
+  </div>
+)}
+    
 
           <div className='date-picker'>
             <button onClick ={() =>{ setHeaderOne("Yesterday's Matches");

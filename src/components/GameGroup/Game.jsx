@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import './Game.styl'
-import { useNavigate } from 'react-router-dom';
 
-const Game = ({game}) => {
-    const navigate = useNavigate()
+const Game = ({game, onSelect}) => {
 
     const formatTime = (isoDate) => {
     const date = new Date(isoDate);
@@ -14,7 +12,9 @@ const Game = ({game}) => {
   }
 
     return(
-        <li className='game-item' onClick={() => navigate(`game/${game.fixture.id}`)}>
+        <li className='game-item' 
+            onClick={() => onSelect(game.fixture.id)}>
+
             <div className='team'>
                 <img src= {game.teams.home.logo}/>
                 <span className='team-name'> {game.teams.home.name} </span>

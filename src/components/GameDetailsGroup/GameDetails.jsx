@@ -1,21 +1,19 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
 import footballService from '../../services/football.js'
 import './GameDetails.styl'
 
-const GameDetails = () => {
-    const {id} = useParams();
+const GameDetails = ({gameId, onClose}) => {
     const [homeStats, setHomeStats] = useState(null);
     const [awayStats, setAwayStats] = useState(null);
 
     useEffect(() => {
     const fetchData = async () => {
       try {
-        const homeStatsRes = await footballService.getGameStats(id);
+        const homeStatsRes = await footballService.getGameStats(gameId);
         setHomeStats(homeStatsRes.response[0]);
         console.log(homeStatsRes)
 
-        const awayStatsRes = await footballService.getGameStats(id);
+        const awayStatsRes = await footballService.getGameStats(gameId);
         setAwayStats(awayStatsRes.response[1]);
         console.log(awayStatsRes)
         
@@ -25,12 +23,13 @@ const GameDetails = () => {
     };
 
     fetchData();
-  }, [id])
+  }, [gameId])
 
     if(!homeStats || !awayStats){
       return(
         <div style={{display:'flex', justifyContent:'center', alignItems:'center', textAlign:'center', height:'100vh'}}>
           <p> Stats not available </p>
+          <button className="close-btn" onClick={onClose}>✕</button>
         </div>
       )
     }
@@ -57,6 +56,7 @@ const GameDetails = () => {
 
     return(
         <div className='game-details'>
+            <button className="close-btn" onClick={onClose}>✕</button>
 
             <div className='head-to-head'>
               <div className='team'>
