@@ -1,16 +1,17 @@
   import { useState, useEffect } from 'react'
-  import footballService  from '../services/football.js'
   import GamesByLeague from '../components/GamesByLeagueGroup/GamesByLeague.jsx'
   import './GameList.styl'
   import { useMemo } from 'react'
   import useGameStore from '../stores/gameStore.js'
+  import useGameDetailsStore from '../stores/gameDetailsStore.js'
   import GameDetails from '../components/GameDetailsGroup/GameDetails.jsx'
 
   const GameList = () => {
     const {games, setGames, date, setSelectedDate} = useGameStore()
+    const { selectedGameId, openGame, closeGame } = useGameDetailsStore()
+
     const [searchName, setSearchName] = useState('')
     const [headerOne, setHeaderOne] = useState("Today's Matches")
-    const [selectedGameId, setSelectedGameId] = useState(null)
 
     useEffect(() => {
       setGames(date)
@@ -49,23 +50,20 @@
                     type="text" 
                     placeholder="Search for a game or league..." />
             </form>
-          </div>
+        </div>
           <h2> {headerOne} </h2>
         
         <GamesByLeague games={filteredGames}
-            onSelectGame={setSelectedGameId}/>
+            onSelectGame={openGame}/>
 
         {selectedGameId && (
-  <div className="modal-backdrop" onClick={() => setSelectedGameId(null)}>
-    <div className="modal-content" onClick={e => e.stopPropagation()}>
-      <GameDetails
-        gameId={selectedGameId}
-        onClose={() => setSelectedGameId(null)}
-      />
-    </div>
-  </div>
-)}
-    
+         <div className="modal-backdrop" onClick={closeGame}>
+           <div className="modal-content" onClick={e => e.stopPropagation()}>
+      
+           <GameDetails />
+            </div>
+          </div>
+        )}
 
           <div className='date-picker'>
             <button onClick ={() =>{ setHeaderOne("Yesterday's Matches");

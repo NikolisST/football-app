@@ -1,6 +1,6 @@
 import React from 'react'
 import './Header.styl'
-import logo from '../../public/football.svg'
+import logo from '../football.svg'
 
 const Header = () => {
   return (
